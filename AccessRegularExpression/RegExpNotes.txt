@@ -1,0 +1,144 @@
+Regular Expressions
+So what are regular expressions? Regular expressions provide tools for
+developing complex pattern matching and textual search-and-replace algorithms.
+Ask any Perl, egrep, or awk developer, and they'll tell you that regular expressions
+are one of the most powerful utilities available for manipulating text and data.
+By creating patterns to match specific strings, a developer has total control over
+searching, extracting, or replacing data. In short, to master regular expressions
+is to master your data. A lot of methods can be found in most Perl programming texts
+
+ The VBScript RegExp object provides 3 properties and 3 methods to the user. 
+
+Properties  
+  Pattern    
+  IgnoreCase    
+  Global    
+
+Pattern - A string that is used to define the regular expression. This must be set before
+  use of the regular expression object.  
+IgnoreCase - A Boolean property that indicates if the regular expression should be tested
+  against all possible matches in a string. By default, IgnoreCase is set to False. 
+Global - A read-only Boolean property that indicates if the regular expression
+  should be tested against all possible matches in a string. By default, Global is set to False. 
+
+Methods  
+  Test (search-string)  
+  Replace (search-string, replace-string)  
+  Execute (search-string)  
+
+Test (string) - The Test method takes a string as its argument and returns True if 
+ the regular expression can successfully be matched against the string, 
+ otherwise False is returned. 
+
+Replace (search-string, replace-string) - The Replace method takes 2 strings as its arguments.
+ If it is able to successfully match the regular expression in the search-string,
+ then it replaces that match with the replace-string, and the new string is returned.
+ If no matches were found, then the original search-string is returned. 
+
+Execute (search-string) - The Execute method works like Replace, except that it returns
+ a Matches collection object, containing a Match object for each successful match.
+ It doesn't modify the original string. 
+
+Regular Expressions tend to be faster than InStr or Like searches over large strings
+by at least a factor of 2. A help file for Regular Expressions can be found in
+JScript5.chm and VbScrip5.chm, these are contained in the Windows Scripting Host 2.0
+
+
+Ok. Here is how to get at Regular Expressions from Access 97.
+ Wish I had known this a year ago.
+
+I assume you have installed Windows Scripting Host 2.0 fom Microsoft at
+http://msdn.microsoft.com/scripting/
+
+ This will give you access to vbscript.dll
+
+ If you go to the tools reference window and search for this file with
+ browse and check off vbscript.dll. You only get access to Microsoft
+ VBScript Globals. So you have to force a reference to be added with
+ code to get regular expressions references. Here is code to do it.
+ This code cannot be executed in a MDE.
+
+
+Function ReferenceFromFile(strFileName As String, _
+              Optional Warning As Boolean) As Boolean
+
+' One caveat adding a reference this way forces a decompile
+' so cannot be used in an MDE. At least not executed inside one to
+' reset references.
+
+    Dim ref As Reference
+
+    On Error GoTo Error_ReferenceFromFile
+    Set ref = References.AddFromFile(strFileName)
+    ReferenceFromFile = True
+
+Exit_ReferenceFromFile:
+    Exit Function
+
+Error_ReferenceFromFile:
+    If Warning = True Then MsgBox Err & ": " & Err.Description
+    ReferenceFromFile = False
+    Resume Exit_ReferenceFromFile
+End Function
+
+
+ Now call this function as follows depending on version required either
+1.0 or 5.5 of VBScript Reqular Expressions. Version 5.5 has extra
+objects to handle Multiline or SubExpressions. 
+
+ Version 1.0
+
+ReferenceFromFile "c:\Windows\System\vbscript.dll\2" , True
+
+    or
+Version 5.5
+
+ReferenceFromFile "c:\Windows\System\vbscript.dll\3" , True
+
+ You will see the references appear in your tools reference list or
+look in Object browser.
+
+
+
+
+ Further Reading
+
+
+A Library of Regular Expressions for Form Validation 
+http://www.asptoday.com/articles/19990629.htm
+
+Ask the XML Pro CSV to XML regExp 
+http://www.devx.com/upload/free/features/xml/2000/02spr00/apspr00/apspr00-1.asp
+
+Ask the XML Pro Regular Expressions from XSL 
+http://www.xmlmag.com/upload/free/features/xml/2000/02spr00/apspr00/apspr00-2.asp
+
+ASP Creating a Personal Search Engine 
+http://aspfree.com/authors/Sixto_Santos/SrchEng.asp
+
+Shallow parse XML 
+http://www.cs.sfu.ca/~cameron/REX.html#III.4
+
+JScript Primer 3-4  Regular Expressions 
+http://www.asptoday.com/articles/19990330.htm
+
+Regular Expressions
+http://uniforum.chi.il.us/regexp-slides/
+
+Shrinking Code With the XML Parser
+http://www.xml-zone.com/articles/mb0100/mb0100.asp
+
+String Manipulation and Pattern Testing with Regular Expressions
+http://www.asptoday.com/articles/19990505.htm
+
+Validation Made Simple with JScript Regular Expressions , MIND October 1998
+http://www.microsoft.com/mind/1098/jscript.htm
+
+Web Workshop - Regular Expressions in VBScript
+http://msdn.microsoft.com/workshop/languages/clinic/scripting051099.asp
+
+
+ If I get carried away, I might write some sample code to use RegExpressions
+to read a sample Report Page and convert to a CSV file or table.
+ This access mdb just provides some sample code to show the utilization
+of RegExp to parse strings and validate data entry, Yes there are probably bugs.
